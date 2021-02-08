@@ -1,14 +1,16 @@
-embed {{args=&ARGS&+['']}} {{a=argparse(args).last}}
+embed {{a=&ARGS&+['']}}{{p=argparse(a).last}}
 {{g=load_json(get_gvar("06ff1c1a-da97-4374-afee-4693da100706"))}}
-{{IS={"name":a("name",a("itemname", "")),"goal":a("goal",a("spgoal",a("sp",""))),"costs":a("costs",""),"dc":a("DC",a("dc","")),"currentGoal":a("current",a("end","")),"note":a("note",""),"rarity":a("rarity",""),"category":a("category",a("cat",""))} }}
-{{m=(2 if args[0] in 'add' else 3 if args[0] in 'remove' else 4 if args[0] in 'edit' else 1) if not args[0] in 'view' else 0}}
-{{c,n=load_json(get('craftingMagicalItems','[]')),'\n'}}
-{{items=[x.name for x in c]}}
-{{valid=(IS.name in items and m>=3) or (IS.name!="" and m==2)}}
-{{updater=c.append(IS) if items==2 else [c.remove(x) for x in c if x.name==IS.name] if items==3 else [x.update({x:IS[x] for x in IS if IS[x]}) for x in c if x.name==IS.name] if items==4 else 0}}
-{{cats=list({x.category for x in c})}}
-{{item=([x for x in c if a[0].lower()==x.name.lower()]+[x for x in c if a[0].lower()==x.name.lower().split()[0]]+[x for x in c if a[0] and a[0].lower() in x.name.lower()]+[x for x in c if name.name==x.name and m==4]+[{}])[0]}}
--title "{{item.name if item else "Trying to craft a Magical Item?" if m==1 else f"{name} {'adds' if valid else 'tried to add'} {IS.name or 'a blank name'} to their Crafting Magical Items!" if m==2 else f"{name} {'removes' if valid else 'tried to remove'} {IS.name} from their crafting Magical Items!" if m==3 else f"{name} {'edits' if valid else 'tried to edit'} the details for {IS.name}!" if m==4 else f"{name} is currently crafting:"}}"
--footer "@Adalbar#(3157)3333 | !craft magical help | !help craft Magical"
-{{f'''-f "Details|{n.join([f"**{x.title()}:** {item[x]}" for x in item if item[x]!="" and x!="name"]) or g.nodettext%item.name}"''' if item else g.helptext if m==1 else ' '.join([f'''-f "{x or 'Uncategorized'}|{n.join([y.name for y in c if y.category==x])}|inline"''' for x in cats]) or g.noitemtext}}
-{{set_cvar('craftingMagicalItems',dump_json(c))}}
+{{np={"name":p("name",p("itemname", "")),"goal":p("goal",p("spgoal",p("sp",""))),"costs":p("costs",""),"dc":p("DC",p("dc","")),"currentSP":p("current",p("end","")),"note":p("note",""),"rarity":p("rarity",""),"category":p("category",p("cat",""))} }}
+{{m=(2 if a[0] in 'add' else 3 if a[0] in 'remove' else 4 if a[0] in 'edit' else 1) if not a[0] in 'overview' else 0}}
+{{rel,n=load_json(get('craftingMagicalItems','[]')),'\n'}}
+{{peeps=[x.name for x in rel]}}
+{{valid=(np.name in peeps and m>=3) or (np.name!="" and m==2)}}
+{{updater=rel.append(np) if m==2 else [rel.remove(x) for x in rel if x.name==np.name] if m==3 else [x.update({x:np[x] for x in np if np[x]}) for x in rel if x.name==np.name] if m==4 else 0}}
+{{cats=list({x.category for x in rel})}}
+{{peep=([x for x in rel if a[0].lower()==x.name.lower()]+[x for x in rel if a[0].lower()==x.name.lower().split()[0]]+[x for x in rel if a[0] and a[0].lower() in x.name.lower()]+[x for x in rel if np.name==x.name and m==4]+[{}])[0]}}
+-title "{{peep.name if peep else "Trying to craft a Magical Item?" if m==1 else f"{name} {'adds' if valid else 'tried to add'} {np.name or 'a blank name'} to their crafting items!" if m==2 else f"{name} {'removes' if valid else 'tried to remove'} {np.name} from their crafting items!" if m==3 else f"{name} {'edits' if valid else 'tried to edit'} the details for {np.name}!" if m==4 else f"{name}'s currently working on:"}}"
+-footer "@""Derixyleth#0636 | !relation help"
+{{f'''-f "Details|{n.join([f"**{x.title()}:** {peep[x]}" for x in peep if peep[x]!="" and x!="name"]) or g.nodettext%peep.name}"''' if peep else g.helptext if m==1 else ' '.join([f'''-f "{x or 'Uncategorized'}|{n.join([y.name for y in rel if y.category==x])}|inline"''' for x in cats]) or g.noitemtext}}
+{{set_cvar('craftingMagicalItems',dump_json(rel))}}
+-color <color>
+-thumb {{peep.get("image",image)}}
