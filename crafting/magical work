@@ -25,7 +25,7 @@ else:
 			for skillName, skill in character().skills:
 			if chosenSkill.lower() in skillName.lower():
 				chosenSkill = skill
-			break
+				break
 		else:
 			adv = args.adv(boolwise=True)
 			guidance = args.last('guidance')
