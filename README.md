@@ -43,8 +43,9 @@ Your check when making a magical item will be based off your casting modifier. I
 5 Once you have all the detail figured out, you will put it into the from pinned in #crafting-approval and ping a DM. 
 
 Note If you have a spell that can help you when enchanting, the SP goal is reduced by 25%
-
+```
 | Rarity    | DC | Cost       | Goal         | Requrements
+
 | Common    | 10 | 25       Gp| 500sp        | Base Item
 
 | Uncommon  | 14 | 100      Gp| 2000sp       | Base Item
@@ -54,3 +55,4 @@ Note If you have a spell that can help you when enchanting, the SP goal is reduc
 | Very-Rare | 18 | 10,000   Gp| 200,000 Sp   |Requires Exotic Material, which you must obtain from a quest
 
 | Legendary | 20 | 100,000  Gp| 2,000,000 Sp | Requires 2 Exotic Material, both obtained from a quest
+```
