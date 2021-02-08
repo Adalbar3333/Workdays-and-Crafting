@@ -7,7 +7,7 @@ oldXP = character().get_cc('Experience')
 cmi = load_json(get('craftingMagicalItems','[]'))
 g=load_json(get_gvar("06ff1c1a-da97-4374-afee-4693da100706"))
 cname = "Workdays"
-np = {"name":p("name",p("itemname", ""))}
+np = {"name":args("name",args("itemname", ""))}
 item = ([x for x in cmi if a[0].lower()==x.name.lower()]+[x for x in cmi if a[0].lower()==x.name.lower().split()[0]]+[x for x in cmi if a[0] and a[0].lower() in x.name.lower()]+[x for x in cmi if np.name==x.name and m==4]+[{}])[0]
 err(f'Could not find an item with the name {args.last("name")}!') if item is 0 else None
 item_rarity = item.rarity if item else None
