@@ -15,81 +15,85 @@ item_dc = int(item.dc) if item else 0
 item_currentSP = int(item.currentSP) if item else 0
 item_goal = int(item.goal) if item else 0
 
-	if item_currentSP >= item_goal: 
-		return f'-title "{name} has already finished this item!" -desc "You can delete this item via `!craft magical remove -name {args.last("name")}`"'
-	else:
-		if item != 0:
-			# Rolles for the skill check
-			if args:
+if item_currentSP >= item_goal: 
+		title = f'-title "{name} has already finished this item!" -desc "You can delete this item via `!craft magical remove -name {args.last("name")}`"'
+else:
+	if item != 0:
+		# Rolles for the skill check
+		if args:
 			chosenSkill = "arcana"
 			for skillName, skill in character().skills:
-				if chosenSkill.lower() in skillName.lower():
+			if chosenSkill.lower() in skillName.lower():
 				chosenSkill = skill
-				break
-			else:
-				adv = args.adv(boolwise=True)
-				guidance = args.last('guidance')
-				dice = chosenSkill.d20(adv) + ("+1d4" if guidance else "")
-				r = vroll(dice)
-				roll_text = f''' -f "{name}'s Craft Roll| {r}" '''
-			# Sets DC if one exists
-			if item_dc != None:
-				dc = item_dc
-			else: 
-				dc = 0
-				err(f'You did not set a DC') if dc is 0 else None
-			dc_text = f'-f "Craft DC| {dc}"'
-			# Sets Rarity 
-			if "common" == item_rarity.lower():
-				character().mod_cc('Experience', +5)
-				xp_text = f'''-f "Experience| You had your rarity set to Common! You gained 5 xp!
-Old Experience: {oldXP}
-New Experience: {character().get_cc('Experience')}" '''
-
-			elif "uncommon" == item_rarity.lower():
-				character().mod_cc('Experience', +10)
-				xp_text = f'''-f "Experience| You had your rarity set to Uncommon! You gained 10 xp!
-Old Experience: {oldXP}
-New Experience: {character().get_cc('Experience')}" '''
-
-			elif "rare" == item_rarity.lower():
-				character().mod_cc('Experience', +20)
-				xp_text = f'''-f "Experience| You had your rarity set to Rare! You gained 20 xp!
-Old Experience: {oldXP}
-New Experience: {character().get_cc('Experience')}" '''
-
-			elif "very-rare" == item_rarity.lower() or "very rare" == item_rarity.lower():
-				character().mod_cc('Experience', +40)
-				xp_text = f'''-f "Experience| You had your rarity set to Very-rare! You gained 40 xp!
-Old Experience: {oldXP}
-New Experience: {character().get_cc('Experience')}" '''
-
-			elif "legendary" == item_rarity.lower():
-				character().mod_cc('Experience', +80)
-				xp_text = f'''-f "Experience| You had your rarity set to Legendary! You gained 80 xp!
-Old Experience: {oldXP}
-New Experience: {character().get_cc('Experience')}" '''
-
-			else: 
-				xp_text = {f'-f "Experience| You do not have a rarity set, so, you did not recive any xp."'}
-			if exists(cname) and not uvar_exists(cname):
-				if int(get(cname)) >= 86400:
-					set_cvar(cname, int(get(cname)) - 86400)
-					if r.total < dc - 5:
-						text += f' -desc "Oops! You broke your item and need to fix it. That will cost "'
-					elif r.total < dc:
-                		text += f' -desc "Oops, you weren\'t quite good enough."'
-					else:
-						change = int(r.total * (dc + proficiencyBonus / 2))
-						item['currentSP']=int(item.currentSP)+change
-						if item_currentSP >= item_goal: 
-							spgoal_text = f''' -f "{name} has finished their {args.last('name')}! Good Job!" '''
-						else:
-							spgoal_text = f''' -f "{name}'s Current Progress| {item_currentSP}" '''
-			return -desc "{name} works on {args.last('name')}"
-			roll_text
-			dc_text
-			xp_text
-			spgoal_text
+			break
 		else:
-			return g.helptext
+			adv = args.adv(boolwise=True)
+			guidance = args.last('guidance')
+			dice = chosenSkill.d20(adv) + ("+1d4" if guidance else "")
+			r = vroll(dice)
+			roll_text = f''' -f "{name}'s Craft Roll| {r}" '''
+		# Sets DC if one exists
+		if item_dc != None:
+			dc = item_dc
+		else: 
+			dc = 0
+			err(f'You did not set a DC') if dc is 0 else None
+		dc_text = f'-f "Craft DC| {dc}"'
+		# Sets Rarity 
+		if "common" == item_rarity.lower():
+			character().mod_cc('Experience', +5)
+			xp_text = f'''-f "Experience| You had your rarity set to Common! You gained 5 xp!
+Old Experience: {oldXP}
+New Experience: {character().get_cc('Experience')}" '''
+
+		elif "uncommon" == item_rarity.lower():
+			character().mod_cc('Experience', +10)
+			xp_text = f'''-f "Experience| You had your rarity set to Uncommon! You gained 10 xp!
+Old Experience: {oldXP}
+New Experience: {character().get_cc('Experience')}" '''
+
+		elif "rare" == item_rarity.lower():
+			character().mod_cc('Experience', +20)
+			xp_text = f'''-f "Experience| You had your rarity set to Rare! You gained 20 xp!
+Old Experience: {oldXP}
+New Experience: {character().get_cc('Experience')}" '''
+
+		elif "very-rare" == item_rarity.lower() or "very rare" == item_rarity.lower():
+			character().mod_cc('Experience', +40)
+			xp_text = f'''-f "Experience| You had your rarity set to Very-rare! You gained 40 xp!
+Old Experience: {oldXP}
+New Experience: {character().get_cc('Experience')}" '''
+
+		elif "legendary" == item_rarity.lower():
+			character().mod_cc('Experience', +80)
+			xp_text = f'''-f "Experience| You had your rarity set to Legendary! You gained 80 xp!
+Old Experience: {oldXP}
+New Experience: {character().get_cc('Experience')}" '''
+
+		else: 
+			xp_text = {f'-f "Experience| You do not have a rarity set, so, you did not recive any xp."'}
+		if exists(cname) and not uvar_exists(cname):
+			if int(get(cname)) >= 86400:
+				set_cvar(cname, int(get(cname)) - 86400)
+				if r.total < dc - 5:
+					text = f' -desc "Oops! You broke your item and need to fix it. That will cost "'
+				elif r.total < dc:
+					text = f' -desc "Oops, you weren\'t quite good enough."'
+				else:
+					change = int(r.total * (dc + proficiencyBonus / 2))
+					item['currentSP']=int(item.currentSP)+change
+					if item_currentSP >= item_goal: 
+						spgoal_text = f''' -f "{name} has finished their {args.last('name')}! Good Job!" '''
+					else:
+						spgoal_text = f''' -f "{name}'s Current Progress| {item_currentSP}" '''
+		title = -title "{{name}} works on {{item}}"
+	else:
+		return g.helptext
+</drac2>
+
+{{title}}
+{{roll_text}}
+{{dc_text}}
+{{text}}
+{{xp_text}}
+{{spgoal_text}}
